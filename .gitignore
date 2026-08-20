@@ -1,0 +1,14 @@
+# Data — too large for GitHub, deposited with the manuscript instead
+*.tsv
+*.csv
+*.gz
+*.zip
+*.xlsx
+*.fastq
+output/
+data/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
