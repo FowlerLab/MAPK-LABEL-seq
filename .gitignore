@@ -1,5 +1,8 @@
 # Data — too large for GitHub, deposited with the manuscript instead
 *.tsv
+# ...except this one: the per-library empty-vector DN thresholds, small enough to
+# version and needed by the dominant-negative step
+!data/dn_cutoffs_empty_vector.tsv
 *.csv
 *.gz
 *.zip

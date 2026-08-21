@@ -58,8 +58,7 @@ population_db:
 
 # Empty-vector-derived per-(library, assay_treatment) DN thresholds.
 # 2.5th percentile of activity score for empty-vector barcodes in each library ×
-# treatment. Replaces the NoVar_std-based DN threshold (docs/open_questions.md
-# Q8) because empty vectors give a true "no kinase" pathway baseline per
+# treatment. Replaces the NoVar_std-based DN threshold  because empty vectors give a true "no kinase" pathway baseline per
 # library, whereas NoVar_std (spiked BRAF variants) varies ~5× across libraries
 # with cold-shock sensitivity.
 ev_dn_cutoffs: data/dn_cutoffs_empty_vector.tsv

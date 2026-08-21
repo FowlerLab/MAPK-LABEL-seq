@@ -21,7 +21,8 @@ WHAT IS IN IT
   barcode support how many barcodes stand behind the number
   scores          the per-replicate ratios, the WT-relative scores, and the
                   standard-adjusted scores -- all UNCORRECTED
-  classification  low / wt-like / high against the cell's synonymous distribution
+  classification  low / wt-like / high against the cell's synonymous distribution,
+                  RECOMPUTED here on the raw scores (see below)
 
 WHAT IS DELIBERATELY NOT IN IT
 
@@ -36,6 +37,26 @@ WHAT IS DELIBERATELY NOT IN IT
 Rows are NOT filtered: all three assays and all treatment arms are present, since
 a raw score exists for each. It is the derived columns that are dropped, not the
 measurements.
+
+THE CLASSIFICATION IS RECOMPUTED, not copied. Upstream, `classification_2.5pct`
+is computed from `average score`, which is the mean of the CORRECTED replicates --
+so copying it into a table that advertises uncorrected scores would put a corrected
+call beside raw numbers. It is recomputed here by the same definition (outside the
+2.5th-97.5th percentile of the cell's synonymous variants) applied to
+`average_score`, the raw mean. It therefore differs from the annotated table's
+column of the same name for the variants the correction moved across a boundary.
+
+CONTROL ROWS ARE KEPT AND MARKED. The spiked BRAF standards, `empty_vector_std`
+and `NoVar_std` are measured in every library, so a BRAF standard appears in the
+KRAS library. Those rows are real measurements and are kept, marked by
+`Mutation Type` and `variant_category` == "standard". What is NOT kept for them is
+the reference sequence: a spike-in is not a variant of the library's protein, so
+`uniprot_id`, `uniprot_accession`, `ensembl_protein`, `refseq_protein` and
+`mane_select` are blank on those rows rather than asserting the host protein's
+identity. `library` and `protein` still record where the measurement was made.
+
+ROWS WITH NO SCORE ARE DROPPED. A variant effect record needs an effect; a row
+whose three replicates are all missing carries none. Every such row is a control.
 
 TWO NAMES TO BE CAREFUL WITH. In the annotated table `average score` is the mean of
 the CORRECTED replicates and `intercept_0_std_adj_score_j` is the standard curve
@@ -102,13 +123,69 @@ def main() -> int:
     missing = [c for c in wanted if c not in d.columns]
     assert not missing, f"columns absent from {SRC.name}: {missing}"
 
-    out = d[wanted + CLASSIFICATION].rename(columns=STD_ADJ)
+    out = d[wanted + ["Mutation Type"]].rename(columns=STD_ADJ)
+    out = out.loc[:, ~out.columns.duplicated()]
 
     # The two averages the annotated table has no uncorrected form of. Computed
     # with the same nan-mean as upstream, so a variant scored in two replicates
     # still gets a value.
     out["average_score"] = out[RAW].mean(axis=1)
     out["average_std_adj_score"] = out[list(STD_ADJ.values())].mean(axis=1)
+
+    # A spike-in control is not a variant of the library's protein, so it carries
+    # no protein-level reference. Blanked rather than left asserting the host
+    # protein: `E695*_std` measured in the KRAS library is a BRAF construct, and a
+    # reader joining on uniprot_id would otherwise be told it is KRAS.
+    is_ctrl = out["Mutation Type"].eq("standard")
+    REF_BLANK = ["uniprot_id", "uniprot_accession", "ensembl_protein",
+                 "refseq_protein", "mane_select"]
+    # `mane_select` is a bool column, which cannot hold NA -- widen first, and use
+    # pandas' nullable boolean so True/False/NA all round-trip through the TSV.
+    out["mane_select"] = out["mane_select"].astype("boolean")
+    for c in REF_BLANK:
+        if out[c].dtype == object or str(out[c].dtype) == "boolean":
+            out.loc[is_ctrl, c] = pd.NA
+        else:
+            out[c] = out[c].astype(object)
+            out.loc[is_ctrl, c] = pd.NA
+    print(f"  blanked the reference sequence on {int(is_ctrl.sum()):,} control rows")
+
+    # `Position` and `Wild Type Residue` carry the sentinel strings "standard" and
+    # "wild type" upstream, which makes Position a mixed-type column. A control and
+    # a wild-type row genuinely have no position, so the sentinel becomes null and
+    # Position is numeric throughout.
+    n_sent = int(pd.to_numeric(out["Position"], errors="coerce").isna().sum())
+    out["Position"] = pd.to_numeric(out["Position"], errors="coerce").astype("Int64")
+    for c in ("Wild Type Residue", "Mutation"):
+        out.loc[out[c].isin(["standard", "wild type"]), c] = pd.NA
+    print(f"  Position is numeric; {n_sent:,} sentinel values became null in "
+          f"Position, Wild Type Residue and Mutation")
+
+    # a barcode count is an integer; float formatting would write it as "225.0"
+    out["Number of Barcodes"] = out["Number of Barcodes"].astype("Int64")
+
+    # A record with no measurement in any replicate is not a variant effect.
+    empty = out[RAW].isna().all(axis=1)
+    if empty.any():
+        print(f"  dropped {int(empty.sum()):,} rows with no score in any replicate "
+              f"({out.loc[empty, 'Mutation Type'].value_counts().to_dict()})")
+        out = out[~empty].copy()
+
+    # Recomputed on the RAW mean -- see the module docstring.
+    def classify(g):
+        syn = g.loc[g["Mutation Type"] == "synonymous wild type", "average_score"]
+        if not len(syn):
+            return pd.Series(pd.NA, index=g.index, dtype="object")
+        lo, hi = syn.quantile(0.025), syn.quantile(0.975)
+        v = g["average_score"]
+        return pd.Series(np.where(v.isna(), None,
+                                  np.where(v < lo, "low",
+                                           np.where(v > hi, "high", "wt-like"))),
+                         index=g.index, dtype="object")
+    out["classification_2.5pct"] = (
+        out.groupby(["library", "assay", "assay_treatment"], group_keys=False)
+           .apply(classify))
+    out = out.drop(columns="Mutation Type").join(d.loc[out.index, ["Mutation Type"]])
 
     # order: identity, reference, support, scores, classification
     order = (IDENTITY + REFERENCE + SUPPORT + RATIOS + RAW + ["average_score"]

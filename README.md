@@ -95,11 +95,18 @@ the evidence. The raw table has none of it.
 
 ## What is here, and what is not
 
-The notebooks; the shared utilities (`utils.py`); the library they import
-(`src/labelseq_mapk/`); the configuration (`config/`); the column reference
-(`docs/score_table_columns.md`); and three scripts — `gain_correction.py` (the
-replicate correction), `reannotate_scores.py` (builds the annotated table) and
-`export_raw_scores.py` (builds the raw table).
+Only what the pipeline needs to run, plus the column reference:
+
+- the four notebooks, and `utils.py` (shared loaders and rendering helpers)
+- `scripts/` — `gain_correction.py` (the replicate correction),
+  `reannotate_scores.py` (builds the annotated table), `export_raw_scores.py`
+  (builds the raw table)
+- `src/labelseq_mapk/` — `config.py` and `annotation.py`, the two modules the
+  above import
+- `config/` — the four YAML files, and `data/dn_cutoffs_empty_vector.tsv`, the one
+  data file small enough to version
+- `docs/score_table_columns.md` — every column of both tables
+- `environment.yaml`
 
 **Not here: any data.** The barcode counts, the score tables and the annotated
 tables are orders of magnitude too large for GitHub, and the annotation source

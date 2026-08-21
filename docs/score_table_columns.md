@@ -23,7 +23,7 @@ distinct variants, 22 libraries, 17 proteins, 3 assays, 8 treatment arms.
 | file | columns | what it is |
 |---|---|---|
 | `scores_reannotated.tsv` | 96 | everything: the gain-corrected replicates, the DN calls, the HSP90 families, structure, conservation, clinical, population. Documented below. |
-| `raw_scores.tsv` | 38 | measurement and identity only, written by `scripts/export_raw_scores.py`. Identity, reference sequence, barcode support, the **uncorrected** scores with their standard curve, and `classification_2.5pct`. No correction, no `DN_EV`, no HSP90, no structural or external annotation. |
+| `raw_scores.tsv` | 38 | measurement and identity only, written by `scripts/export_raw_scores.py`. **531,509 rows.** Identity, reference sequence, barcode support, the **uncorrected** scores with their standard curve, and `classification_2.5pct`. No correction, no `DN_EV`, no HSP90, no structural or external annotation. |
 
 `raw_scores.tsv` is a strict column selection, so every value in it equals the
 corresponding value in the annotated table. Two names differ deliberately, because
@@ -34,6 +34,28 @@ they mean different things and the tables are joinable on
 |---|---|
 | `score_j`, `average_score` | `score_j` raw; `average score` is the mean of the **corrected** replicates |
 | `std_adj_score_j`, `average_std_adj_score` | `raw_std_adj_score_j`; `intercept_0_std_adj_score_j` is fitted on the **corrected** replicates |
+| `classification_2.5pct` **recomputed on the raw mean** | the same name, computed on the **corrected** mean — the two differ on 531 rows |
+
+Four further differences, all in `raw_scores.tsv` and all deliberate:
+
+* **Control rows keep their measurement but lose the reference sequence.** The
+  spiked BRAF standards, `empty_vector_std` and `NoVar_std` are measured in every
+  library, so a BRAF standard appears under KRAS. Those rows are real and are kept,
+  marked by `Mutation Type` and `variant_category` == `standard`; `library` and
+  `protein` still say where the measurement was made. But `uniprot_id`,
+  `uniprot_accession`, `ensembl_protein`, `refseq_protein` and `mane_select` are
+  **blank** on them — a spike-in is not a variant of the host protein, and leaving
+  the host's accession there would tell a reader it was.
+* **No sentinel strings.** Upstream, `Position`, `Wild Type Residue` and `Mutation`
+  carry the literal strings `standard` and `wild type`, which makes `Position` a
+  mixed-type column. Here those 531 rows are null in all three, and `Position` is
+  an integer column.
+* **`Number of Barcodes` is an integer**, not a float.
+* **Rows with no score are dropped** — 288 of them, all controls. A variant effect
+  record needs an effect.
+
+`std_adj_score_j` is empty for the 3,817 rows of the KRAS interaction assay, which
+has no assigned standards and therefore no curve to fit.
 
 ---
 

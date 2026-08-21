@@ -11,7 +11,7 @@ follows the pattern:
         return df
 
 This module faithfully replicates Notebook 2 (Generate_table.ipynb) logic.
-See docs/known_bugs_and_gotchas.md for known issues.
+See the project docs for known issues.
 """
 
 from pathlib import Path
@@ -361,7 +361,7 @@ def add_dominant_negative_ev(
     overexpression cassette, so their activity scores are the true
     "no kinase" pathway baseline inside each library. This fixes the
     cold-shock confound that broke the per-protein NoVar_std thresholds
-    (docs/open_questions.md Q8 and user memory `project_novar_cold_shock`).
+    (see the DN threshold discussion in the project docs).
 
     Thresholds live in data/dn_cutoffs_empty_vector.tsv (path key
     'ev_dn_cutoffs' in config/paths.yaml). Scores are on the WT-relative
@@ -1202,7 +1202,7 @@ def add_alignment_positions(
     scripts/compute_jsd_conservation.py), which is the better-validated statistic,
     and (c) it counted every record of the alignment including the ANNOTATION
     pseudo-sequence, so non-residue characters entered the column distributions
-    (bug B11 in docs/known_bugs_and_gotchas.md). The column-mapping below never
+    (bug B11 in the project docs). The column-mapping below never
     depended on the entropy and is unchanged.
 
     Args:
