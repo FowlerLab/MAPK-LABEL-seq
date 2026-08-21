@@ -1,0 +1,137 @@
+# Scoring pipeline parameters
+# These values come from the original analysis and must be kept
+# in sync until parity is confirmed.
+
+# Minimum read count per channel per replicate. Counts below this → NaN.
+count_cutoff: 10
+
+# Per-replicate frequency cutoffs. [0, 0, 0] means no filtering.
+freq_cutoffs: [0, 0, 0]
+
+# Minimum average number of quantified barcodes across replicates.
+# Variants below this threshold are dropped from final output.
+mean_barcodes_cutoff: 5
+
+# Outlier detection parameters
+outlier:
+  sd_threshold: 2.5       # Standard deviations above median
+  min_replicates: 2       # Must be outlier in ≥N replicates to remove
+  direction: upper_only   # BUG B2: lower bound is commented out in original
+
+# Assay channel mappings (numerator / denominator for ratio calculation)
+assay_channels:
+  activity:
+    numerator: pEM1
+    denominator: E40
+  abundance:
+    numerator: Flag
+    denominator: HT
+  interaction:
+    numerator: Strep
+    denominator: Flag
+
+# Standard control variants with assigned scores for standard curve fitting.
+# These are BRAF variants spiked into every library.
+# The standard curve is y = m*x (intercept forced to 0).
+standard_controls:
+  activity:
+    R509Y_std: 0.396
+    Wild Type_std: 1.0
+    G469T_std: 8.355
+    G258E_std: 12.0
+    K601D_std: 18.95
+  abundance:
+    "E695*_std": 0.16
+    I592S_std: 0.29
+    G258N_std: 0.53
+    P367N_std: 0.71
+    S727K_std: 0.66
+    Wild Type_std: 1.0
+
+# GOTCHA G1: BRAF activity uses raw WT-normalized scores, not standard-curve-adjusted.
+# Rationale: BRAF is the source of the standard controls — applying the curve would be circular.
+skip_standard_curve:
+  - library: braf_cterm
+    assay: activity
+  - library: braf_nterm
+    assay: activity
+
+# GOTCHA G2: Libraries where nonsense variants are excluded from ABUNDANCE.
+# These are libraries with C-terminal MCP tags (mcp_tag_position: C-terminal
+# in proteins.yaml). A nonsense mutation truncates the protein before the tag →
+# tag lost → barcode not enriched → artifactual measurement.
+# Activity assays (which tag ERK, not the variant) are unaffected.
+#
+# Rather than maintaining a separate list, the pipeline should derive this from
+# mcp_tag_position in proteins.yaml. For now, the explicit list is kept for
+# parity with the golden file. The list matches all libraries where
+# mcp_tag_position == C-terminal.
+exclude_nonsense_libraries:
+  - met
+  - ret
+  - egfr
+  - erbb2
+  - sos1
+  - sos2
+
+# Proteins where dominant-negative classification is NOT applied.
+# These proteins inhibit the pathway when overexpressed, so low activity
+# is the expected WT phenotype, not a dominant-negative effect.
+# Updated 2026-04-19: ARAF and RET removed from this list — despite earlier
+# categorisation they are pathway activators (ARAF is a RAF family kinase;
+# RET is an RTK that signals through SHC/GRB2). Keep only the five true
+# inhibitors: the MEK-pathway negative regulators and scaffolds.
+inhibitory_proteins:
+  - grb2
+  - mek1
+  - mek2
+  - ksr1
+  - ksr2
+
+# ---------------------------------------------------------------------------
+# Dominant-negative classification (computed in annotation, not scoring)
+# ---------------------------------------------------------------------------
+#
+# DN = activity below a percentile of the NoVar_std distribution.
+# NoVar_std = no variant protein overexpressed (background pERK level).
+#
+# Two flavors:
+#   DN_Xpct   — pooled threshold: Xth percentile of NoVar_std scores across
+#               all non-inhibitory libraries (excluding EGFR; see G5).
+#   DNpp_Xpct — per-protein threshold: Xth percentile of NoVar_std score
+#               for that specific library. Accounts for library-specific
+#               baseline differences (e.g., SOS1=0.34 vs MRAS=1.86).
+#
+# Both use intercept_0_standard-adjusted score on activity assay,
+# DMSO/No_treatment conditions only.
+#
+# inhibitory_proteins are excluded from DN classification entirely.
+
+dominant_negative:
+  # Score column used for DN classification
+  score_column: "intercept_0_standard-adjusted score"
+  assay: activity
+  treatments: ["DMSO", "No_treatment"]
+  reference_variant: "NoVar_std"
+
+  # Libraries excluded from the pooled NoVar_std distribution
+  exclude_from_pool: ["egfr"]
+
+  # Percentile thresholds to compute (both pooled and per-protein)
+  percentiles: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+
+  # Column naming:
+  #   DN_5pct, DN_10pct, ..., DN_50pct       (pooled)
+  #   DNpp_5pct, DNpp_10pct, ..., DNpp_50pct (per-protein)
+  pooled_prefix: "DN"
+  per_protein_prefix: "DNpp"
+
+# Percentile-based classification thresholds.
+# Computed from synonymous wild-type distribution of 'average score'.
+classification_percentiles:
+  - name: classification_5pct
+    lower: 0.05
+    upper: 0.95
+  - name: classification_2.5pct
+    lower: 0.025
+    upper: 0.975

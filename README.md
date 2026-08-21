@@ -63,10 +63,17 @@ eight rows. Aggregating without grouping on that key mixes assays and treatments
 `araf_cterm` and `araf_nterm` are different constructs of ARAF, each spanning the
 full protein.
 
-## Data
+## What is here, and what is not
 
-The count tables, score tables and annotated tables are far too large for GitHub
-and are not in this repository. They are available on request, and will be
+The notebooks, the shared utilities (`utils.py`), the replicate gain correction
+(`scripts/gain_correction.py`), the library the notebooks import
+(`src/labelseq_mapk/`) and the configuration (`config/`).
+
+**Not here: any data.** The barcode counts, the score tables and the annotated
+tables are orders of magnitude too large for GitHub, and the annotation source
+files are third-party downloads. `config/paths.yaml` is therefore a template:
+its paths point into a `data/inputs/` tree that you populate, not at the
+locations they were built from. The tables are available on request and will be
 deposited with the manuscript.
 
 ## Environment

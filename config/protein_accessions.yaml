@@ -1,0 +1,324 @@
+# Protein accessions for HGVS output, and the evidence for each.
+#
+# `uniprot` is the isoform whose sequence our variant positions actually match --
+# NOT necessarily the UniProt canonical. Every accession here was validated by
+# fetching its sequence and checking the wild-type residue at every position we
+# score; `wt_validation` is that result. The terminal stop codon sits at length+1
+# by construction and is not counted as a mismatch.
+#
+# `ensembl_protein` is UniProt's Ensembl cross-reference FOR THAT ISOFORM, or null
+# where none encodes our sequence. The amino-acid sequence was validated against
+# UniProt directly; the ENSP is a mapped identifier, not an independently fetched
+# sequence. Every ENSP here was verified by fetching its translation from Ensembl
+# and requiring a character-for-character match; see
+# output/scoring/ensembl_protein_verification.tsv and
+# scripts/verify_ensembl_proteins.py.
+#
+# Regenerate with scripts/build_protein_accessions.py.
+araf:
+  ensembl_note: 8 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000366244.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 606
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 8
+  positions_checked: 606
+  refseq_protein: NP_001645.1
+  refseq_transcript: NM_001654.5
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P10398
+  wt_mismatches: 0
+  wt_validation: 606/606
+braf:
+  ensembl_crossref_rejected: ENSP00000493543.1
+  ensembl_note: UniProt's Ensembl cross-reference ENSP00000493543.1 is NOT sequence-identical
+    to this isoform and was rejected
+  ensembl_protein: ENSP00000815007.1
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 766
+  mane_select: false
+  mane_select_rejected:
+    ensembl_protein: ENSP00000496776.1
+    refseq_protein: NP_001361187.1
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 1
+  positions_checked: 767
+  refseq_protein: NP_004324.2
+  refseq_transcript: NM_004333.6
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P15056
+  wt_mismatches: 0
+  wt_validation: 767/767
+craf:
+  ensembl_note: 16 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000251849.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 648
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 8
+  n_identical_translations: 16
+  positions_checked: 649
+  refseq_protein: NP_002871.1
+  refseq_transcript: NM_002880.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P04049
+  wt_mismatches: 0
+  wt_validation: 649/649
+egfr:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000275493.2
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1210
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 573
+  refseq_protein: NP_005219.2
+  refseq_transcript: NM_005228.5
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P00533
+  wt_mismatches: 0
+  wt_validation: 573/573
+erbb2:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000269571.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1255
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  note: 'The one WT mismatch is T1256fs: pacybara named the stop-codon position with a residue
+    rather than ''*''. Positions 1250-1255 match P04626 exactly, so the numbering is correct.'
+  positions_checked: 945
+  refseq_protein: NP_004439.2
+  refseq_transcript: NM_004448.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P04626
+  wt_mismatches: 1
+  wt_validation: 944/945
+grb2:
+  ensembl_note: 8 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000339007.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 217
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 8
+  positions_checked: 218
+  refseq_protein: NP_002077.1
+  refseq_transcript: NM_002086.5
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P62993
+  wt_mismatches: 0
+  wt_validation: 218/218
+kras:
+  ensembl_note: 5 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000308495.3
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 188
+  mane_select: false
+  mane_select_rejected:
+    ensembl_protein: ENSP00000256078.5
+    refseq_protein: NP_203524.1
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 2
+  n_identical_translations: 5
+  note: KRAS4B. P01116-2 matches 188/189 of our positions; the UniProt canonical P01116-1
+    (KRAS4A) matches only 167/189. The single non-match is the terminal stop at 189.
+  positions_checked: 189
+  refseq_note: 2 RefSeq records encode this identical protein; the primary (lowest-numbered)
+    curated one is used, as MANE Select encodes a different proteoform
+  refseq_protein: NP_004976.2
+  refseq_transcript: NM_004985.5
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P01116-2
+  wt_mismatches: 0
+  wt_validation: 189/189
+ksr1:
+  ensembl_protein: null
+  ensembl_verified: no Ensembl translation is sequence-identical to the UniProt isoform we
+    score; HGVS falls back to the UniProt accession
+  length: 923
+  mane_select: false
+  mane_select_rejected:
+    ensembl_protein: ENSP00000494552.1
+    refseq_protein: NP_001381512.1
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 2
+  n_identical_translations: 0
+  note: Q8IVT5's ONLY Ensembl cross-reference is ENSP00000381958.3, tagged isoform Q8IVT5-4,
+    but our positions match isoform 1 (902/903). No ENSP encodes our sequence, so none is
+    emitted and hgvs_p_full falls back to the UniProt accession. This is the non-MANE-Select
+    accession Sriram flagged.
+  positions_checked: 903
+  refseq_note: 2 RefSeq records encode this identical protein, all predicted models (XM_/XP_);
+    no curated NM_ record does. The primary (lowest-numbered) one is used.
+  refseq_protein: XP_011523731.1
+  refseq_transcript: XM_011525429.3
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q8IVT5
+  wt_mismatches: 0
+  wt_validation: 903/903
+ksr2:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000339952.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 950
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 950
+  refseq_protein: NP_775869.4
+  refseq_transcript: NM_173598.6
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q6VAB6
+  wt_mismatches: 0
+  wt_validation: 950/950
+mek1:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000302486.5
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 393
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 394
+  refseq_protein: NP_002746.1
+  refseq_transcript: NM_002755.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q02750
+  wt_mismatches: 0
+  wt_validation: 394/394
+mek2:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000262948.4
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 400
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 400
+  refseq_protein: NP_109587.1
+  refseq_transcript: NM_030662.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P36507
+  wt_mismatches: 0
+  wt_validation: 400/400
+met:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000380860.3
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1390
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 464
+  refseq_protein: NP_000236.2
+  refseq_transcript: NM_000245.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P08581
+  wt_mismatches: 0
+  wt_validation: 464/464
+mras:
+  ensembl_note: 12 Ensembl translations are sequence-identical to this isoform, including
+    UniProt's cross-reference ENSP00000289104; the Ensembl canonical one is used
+  ensembl_protein: ENSP00000389682.2
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 208
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 14
+  n_identical_translations: 12
+  positions_checked: 208
+  refseq_protein: NP_001078518.1
+  refseq_transcript: NM_001085049.3
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: O14807
+  wt_mismatches: 0
+  wt_validation: 208/208
+ret:
+  ensembl_protein: ENSP00000347942.3
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1114
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 2
+  n_identical_translations: 1
+  positions_checked: 725
+  refseq_protein: NP_066124.1
+  refseq_transcript: NM_020975.6
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: P07949
+  wt_mismatches: 0
+  wt_validation: 725/725
+shp2:
+  ensembl_crossref_rejected: ENSP00000489597.1
+  ensembl_note: UniProt's Ensembl cross-reference ENSP00000489597.1 is NOT sequence-identical
+    to this isoform and was rejected
+  ensembl_protein: ENSP00000340944.3
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 593
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 594
+  refseq_protein: NP_002825.3
+  refseq_transcript: NM_002834.5
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q06124
+  wt_mismatches: 0
+  wt_validation: 594/594
+sos1:
+  ensembl_protein: ENSP00000384675.2
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1333
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 1
+  positions_checked: 662
+  refseq_protein: NP_005624.2
+  refseq_transcript: NM_005633.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q07889
+  wt_mismatches: 0
+  wt_validation: 662/662
+sos2:
+  ensembl_note: 2 Ensembl translations are sequence-identical to this isoform; the Ensembl
+    canonical one is used
+  ensembl_protein: ENSP00000216373.5
+  ensembl_verified: sequence identical to the UniProt isoform
+  length: 1332
+  mane_select: true
+  mane_version: MANE.GRCh38.v1.5
+  n_identical_refseq: 1
+  n_identical_translations: 2
+  positions_checked: 735
+  refseq_protein: NP_008870.2
+  refseq_transcript: NM_006939.4
+  refseq_verified: CDS translation identical to the UniProt isoform
+  uniprot: Q07890
+  wt_mismatches: 0
+  wt_validation: 735/735

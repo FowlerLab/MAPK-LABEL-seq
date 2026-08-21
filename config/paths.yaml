@@ -1,0 +1,65 @@
+# Paths to input data files, relative to the project root.
+# All paths under data/inputs/
+
+base_dir: data/inputs
+
+raw_dataframes: data/inputs/all_dataframe_beforefreqcutoff_manually_curated
+
+# Annotation data sources
+annotations:
+  dssp_dir: data/inputs/annotations/AF_MAPK_DSSP_outputs
+  cysdb_dir: data/inputs/annotations/CysDB_files
+  opencell: data/inputs/annotations/opencell_curated.csv
+  clinvar: data/inputs/annotations/clinvar_MAPK_filtered.csv
+  # The curated PDB interfaces PLUS the four augmentations that fill gaps which
+  # are missing curation rather than missing biology: the RET kinase dimer from
+  # 7JU5, SOS2's catalytic surface projected from SOS1, the ARAF dimer projected
+  # from BRAF, and MEK2's seven partner surfaces projected from MEK1. Built by
+  # scripts/build_augmented_interactions.py, which copies
+  # `interactions_jess_edits.txt` and appends to it -- the raw file is never
+  # modified, and remains the ultimate source.
+  #
+  # Pointed here rather than at the raw file on 2026-08-14, so there is ONE
+  # interface annotation. Reading the un-augmented file here while the augmented
+  # file was read downstream produced two near-identical columns, and left the
+  # engine's version with 0 interface positions for SOS2 and 2 for RET.
+  interactions: output/dn/interactions_curated_augmented.tsv
+  kinase_alignment: data/inputs/annotations/Human-PK-alignment.fasta
+
+  # NCBI conserved domains
+  ncbi_features: data/inputs/annotations/NCBI_conserved_domains_annotations/features.txt
+  ncbi_domains: data/inputs/annotations/NCBI_conserved_domains_annotations/domains.txt
+
+  # Published datasets
+  alphamissense: data/inputs/annotations/Published_Datasets/AlphaMissense/AlphaMissense_aa_substitutions_mapks_only.tsv
+  fu_braf: data/inputs/annotations/Published_Datasets/Fu_BRAF_PMID35512704_SupplementaryTable2B.tsv
+  lehner_kras: data/inputs/annotations/Published_Datasets/Lehner_KRas_PMID38109937_SupplementaryTable4.tsv
+  shah_shp2_fig2b: data/inputs/annotations/Published_Datasets/Shah_shp2_PMID39091798_sourcedata_fig2b.txt
+  shah_shp2_fig2c: data/inputs/annotations/Published_Datasets/Shah_shp2_PMID39091798_sourcedata_fig2c.txt
+  aguirre_kras: data/inputs/annotations/Published_Datasets/Aguirre_KRas_HA1E_log_foldchange.tsv
+  beltrao_psites: data/inputs/annotations/Published_Datasets/Beltrao_psites_31819260.txt
+
+  # PhosphoSitePlus
+  psp_dir: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116
+  psp_phosphorylation: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116/Phosphorylation_site_dataset.tsv
+  psp_ubiquitination: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116/Ubiquitination_site_dataset.tsv
+  psp_regulatory: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116/Regulatory_sites_MAPKonly.tsv
+  psp_disease: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116/Disease-associated_sites.tsv
+
+  # PDB structures for interface calculations
+  pdb_dir: data/inputs/annotations/pdb_controls 2
+
+# Population database data 
+# These are cached API query results — positions mapped to our coordinates
+population_db:
+  gnomad_variants: data/inputs/population/gnomad_variants.tsv
+  aou_variants: data/inputs/population/aou_variants.tsv
+  position_mapping: data/inputs/population/position_mapping.tsv
+
+# Empty-vector-derived per-(library, assay_treatment) DN thresholds.
+# 2.5th percentile of activity score for empty-vector barcodes in each library ×
+# treatment. Replaces the NoVar_std-based DN threshold (docs/open_questions.md
+# Q8) because empty vectors give a true "no kinase" pathway baseline per
+# library, whereas NoVar_std (spiked BRAF variants) varies ~5× across libraries
+# with cold-shock sensitivity.
+ev_dn_cutoffs: data/dn_cutoffs_empty_vector.tsv

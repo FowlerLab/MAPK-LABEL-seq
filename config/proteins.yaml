@@ -1,0 +1,393 @@
+# ===========================================================================
+# Per-library metadata for the LABEL-seq MAPK pipeline
+# ===========================================================================
+#
+# Each entry is keyed by LIBRARY NAME (as it appears in raw data filenames).
+# For split proteins (>~550aa), there are separate entries for nterm and cterm.
+#
+# Fields:
+#   gene_name:        HGNC gene symbol
+#   uniprot_id:       UniProt accession (canonical isoform)
+#   protein:          Base protein name (for split libraries; omit if same as key)
+#   protein_length:   Full-length protein in amino acids
+#   library_coverage: [first_residue, last_residue] in UniProt numbering
+#   raw_indexing:      0 or 1 — whether the raw variant positions are 0- or 1-indexed
+#   position_offsets:  Per-assay offsets to convert raw → UniProt positions.
+#                      Computed as: (first UniProt residue in library - 1) if 1-indexed,
+#                                   (first UniProt residue in library) if 0-indexed.
+#   mcp_tag_position: N-terminal or C-terminal MCP tag on the variant protein.
+#                     C-terminal → nonsense variants excluded from abundance.
+#   client_status:    HSP90 interaction status (strong/weak/non/unknown).
+#                     Source: Generate_table.ipynb; reflects literature, not this experiment.
+#   domains:          {name: [start, end]} — domain boundaries in UniProt numbering.
+#   verification:     Known variant used to confirm position numbering.
+#
+# IMPORTANT: position_offsets must exactly match the notebook offset table.
+# Verified against 19 known disease variants on 2026-04-05.
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# Single-part libraries (protein ≤ ~550aa, cloned as one piece)
+# ---------------------------------------------------------------------------
+
+kras:
+  gene_name: KRAS
+  uniprot_id: P01116
+  protein_length: 189
+  library_coverage: [2, 189]       # Met excluded
+  raw_indexing: 1                   # G12V at raw position 12
+  position_offsets: {}
+  mcp_tag_position: N-terminal
+  client_status: unknown
+  domains:
+    g_domain: [1, 166]
+  verification: "G12V=12, G13D=13, Q61H=61, A146T=146 — all correct"
+
+mras:
+  gene_name: MRAS
+  uniprot_id: O14807
+  protein_length: 208
+  library_coverage: [2, 208]
+  raw_indexing: 0                   # Q71L at raw position 70
+  position_offsets:
+    activity: 1
+    abundance: 1
+  mcp_tag_position: N-terminal
+  client_status: unknown
+  domains:
+    g_domain: [12, 176]
+  verification: "Q71L=71, T68I=68 — correct after +1 offset"
+
+shp2:
+  gene_name: PTPN11
+  uniprot_id: Q06124
+  protein_length: 593
+  library_coverage: [2, 593]
+  raw_indexing: 0                   # E76K at raw position 75
+  position_offsets:
+    activity: 1
+    abundance: 1
+  mcp_tag_position: N-terminal
+  client_status: unknown
+  domains:
+    sh2_1: [6, 102]
+    sh2_2: [112, 216]
+    phosphatase: [247, 517]
+  verification: "E76K=76, D61G=61, A72V=72 — correct after +1 offset"
+
+grb2:
+  gene_name: GRB2
+  uniprot_id: P62993
+  protein_length: 217
+  library_coverage: [2, 217]
+  raw_indexing: 0
+  position_offsets:
+    activity: 1
+    abundance: 1
+  mcp_tag_position: N-terminal
+  client_status: unknown
+  domains:
+    n_sh3: [1, 56]
+    sh2: [56, 150]
+    c_sh3: [160, 212]
+
+mek1:
+  gene_name: MAP2K1
+  uniprot_id: Q02750
+  protein_length: 393
+  library_coverage: [2, 393]
+  raw_indexing: 1                   # K97 (catalytic Lys) at raw position 97
+  position_offsets: {}
+  mcp_tag_position: N-terminal
+  client_status: non
+  domains:
+    kinase: [68, 361]
+  verification: "K97 catalytic lysine at position 97 — correct, no offset"
+
+mek2:
+  gene_name: MAP2K2
+  uniprot_id: P36507
+  protein_length: 400
+  library_coverage: [2, 400]
+  raw_indexing: 0                   # K101 (catalytic Lys) at raw position 100
+  position_offsets:
+    activity: 1
+    abundance: 1
+  mcp_tag_position: N-terminal
+  client_status: non
+  domains:
+    kinase: [68, 400]
+  verification: "K101 catalytic lysine at raw pos 100 → +1 → 101 — correct"
+
+# ---------------------------------------------------------------------------
+# Single-part libraries, C-terminally MCP-tagged
+# Nonsense variants are excluded from abundance assays because the stop codon
+# truncates the protein before the C-terminal MCP tag → tag not translated →
+# barcode cannot be co-enriched → artifactual measurement.
+# ---------------------------------------------------------------------------
+
+egfr:
+  gene_name: EGFR
+  uniprot_id: P00533
+  protein_length: 1210
+  library_coverage: [671, 1210]     # Intracellular portion
+  raw_indexing: 1                    # First residue in raw data = position 1
+  position_offsets:
+    activity: 670
+    abundance: 670
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: non
+  domains:
+    kinase: [712, 979]
+  verification: "L858R=858, T790M=790, G719S=719, C797S=797 — all correct"
+
+erbb2:
+  gene_name: ERBB2
+  uniprot_id: P04626
+  protein_length: 1255
+  library_coverage: [686, 1255]
+  raw_indexing: 1
+  position_offsets:
+    activity: 685
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: strong             # From Generate_table.ipynb; see GOTCHA G6
+  domains:
+    kinase: [720, 987]
+
+met:
+  gene_name: MET
+  uniprot_id: P08581
+  protein_length: 1390
+  library_coverage: [955, 1390]
+  raw_indexing: 1
+  position_offsets:
+    activity: 954
+    abundance: 954
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: weak
+  domains:
+    kinase: [1082, 1343]
+  verification: "Y1235D=1235, D1228N=1228 — correct"
+
+ret:
+  gene_name: RET
+  uniprot_id: P07949
+  protein_length: 1114
+  library_coverage: [660, 1114]
+  raw_indexing: 1
+  position_offsets:
+    activity: 659
+    abundance: 659
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: weak
+  domains:
+    kinase: [724, 1016]
+  verification: "M918T=918 — correct"
+
+sos1:
+  gene_name: SOS1
+  uniprot_id: Q07889
+  protein_length: 1333
+  library_coverage: [536, 939]      # Partial: GEF domain region
+  raw_indexing: 1
+  position_offsets:
+    activity: 535
+    abundance: 535
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: unknown
+  domains:
+    gef: [597, 1019]
+
+sos2:
+  gene_name: SOS2
+  uniprot_id: Q07890
+  protein_length: 1332
+  library_coverage: [534, 937]      # Partial: GEF domain region
+  raw_indexing: 1
+  position_offsets:
+    activity: 533
+    abundance: 533
+  mcp_tag_position: C-terminal      # → nonsense excluded from abundance
+  client_status: unknown
+  domains:
+    gef: [595, 1013]
+
+# ---------------------------------------------------------------------------
+# Placeholder for future data
+# ---------------------------------------------------------------------------
+
+shoc2:
+  gene_name: SHOC2
+  uniprot_id: Q9UQ13
+  protein_length: 582
+  library_coverage: []              # Data not yet available
+  raw_indexing: null
+  position_offsets: {}
+  mcp_tag_position: null
+  client_status: unknown
+  domains: {}
+
+# ---------------------------------------------------------------------------
+# Split libraries (protein > ~550aa, cloned in two halves)
+#
+# The _nterm/_cterm suffix refers to which HALF of the protein is scanned,
+# NOT the MCP tag position. Tag position varies by construct.
+# ---------------------------------------------------------------------------
+
+# --- ARAF (604 aa) ---
+
+araf_nterm:
+  gene_name: ARAF
+  uniprot_id: P10398
+  protein: araf
+  protein_length: 604
+  library_coverage: [2, 296]        # N-terminal half: RBD + CRD
+  raw_indexing: 0
+  position_offsets:
+    activity: 1
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    rbd: [19, 91]
+    crd: [98, 144]
+
+araf_cterm:
+  gene_name: ARAF
+  uniprot_id: P10398
+  protein: araf
+  protein_length: 604
+  library_coverage: [298, 604]      # C-terminal half: kinase domain
+  raw_indexing: 1                    # First residue at raw position 1
+  position_offsets:
+    activity: 297
+    abundance: 297
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    kinase: [310, 570]
+
+# --- BRAF (766 aa) ---
+
+braf_nterm:
+  gene_name: BRAF
+  uniprot_id: P15056
+  protein: braf
+  protein_length: 766
+  library_coverage: [2, 456]        # N-terminal half: RBD + CRD
+  raw_indexing: 1
+  position_offsets: {}
+  mcp_tag_position: N-terminal
+  client_status: weak
+  domains:
+    braf_specific: [41, 106]
+    rbd: [155, 227]
+    crd: [234, 280]
+
+braf_cterm:
+  gene_name: BRAF
+  uniprot_id: P15056
+  protein: braf
+  protein_length: 766
+  library_coverage: [457, 766]      # C-terminal half: kinase domain
+  raw_indexing: 1                    # V600E at raw position 600
+  position_offsets: {}              # Raw positions are already UniProt-numbered
+  mcp_tag_position: N-terminal
+  client_status: weak
+  domains:
+    kinase: [457, 717]
+  verification: "V600E=600, K601E=601, G466V=466, D594N=594 — all correct, no offset"
+
+# --- CRAF / RAF1 (648 aa) ---
+
+craf_nterm:
+  gene_name: RAF1
+  uniprot_id: P04049
+  protein: craf
+  protein_length: 648
+  library_coverage: [2, 335]        # N-terminal half
+  raw_indexing: 1
+  position_offsets: {}
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    rbd: [56, 131]
+    crd: [138, 184]
+
+craf_cterm:
+  gene_name: RAF1
+  uniprot_id: P04049
+  protein: craf
+  protein_length: 648
+  library_coverage: [337, 648]      # C-terminal half: kinase domain
+  raw_indexing: 1
+  position_offsets:
+    activity: 336
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    kinase: [349, 609]
+
+# --- KSR1 (923 aa) ---
+
+ksr1_nterm:
+  gene_name: KSR1
+  uniprot_id: Q8IVT5
+  protein: ksr1
+  protein_length: 923
+  library_coverage: [2, 478]
+  raw_indexing: 0
+  position_offsets:
+    activity: 1
+    abundance: 1
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    sam: [41, 168]
+    crd: [347, 391]
+
+ksr1_cterm:
+  gene_name: KSR1
+  uniprot_id: Q8IVT5
+  protein: ksr1
+  protein_length: 923
+  library_coverage: [480, 923]
+  raw_indexing: 1
+  position_offsets:
+    activity: 479
+    abundance: 479
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    kinase: [613, 883]
+
+# --- KSR2 (950 aa) ---
+
+ksr2_nterm:
+  gene_name: KSR2
+  uniprot_id: Q6VAB6
+  protein: ksr2
+  protein_length: 950
+  library_coverage: [2, 485]
+  raw_indexing: 0
+  position_offsets:
+    activity: 1
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    sam: [24, 152]
+    crd: [408, 464]
+
+ksr2_cterm:
+  gene_name: KSR2
+  uniprot_id: Q6VAB6
+  protein: ksr2
+  protein_length: 950
+  library_coverage: [487, 950]
+  raw_indexing: 1
+  position_offsets:
+    activity: 486
+    abundance: 486
+  mcp_tag_position: N-terminal
+  client_status: strong
+  domains:
+    kinase: [665, 934]
