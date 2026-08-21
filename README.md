@@ -63,11 +63,38 @@ eight rows. Aggregating without grouping on that key mixes assays and treatments
 `araf_cterm` and `araf_nterm` are different constructs of ARAF, each spanning the
 full protein.
 
+## The two score tables
+
+The pipeline writes two tables. Which one you want depends on what you are doing.
+
+| table | columns | what it is |
+|---|---|---|
+| **`raw_scores.tsv`** | 38 | The measurements. Identity, reference sequence (UniProt isoform, RefSeq, Ensembl, and GRCh38 coordinates where the protein change has a resolvable nucleotide route), barcode support, the **uncorrected** per-replicate ratios and scores with their standard curve, and the low/wt-like/high classification. Written by `scripts/export_raw_scores.py`. |
+| **`scores_reannotated.tsv`** | 96 | Everything the figures need: the gain-corrected replicates, dominant-negative calls, the HSP90 dependence and buffering families, structure, conservation, PTMs, clinical and population annotation. Written by `scripts/reannotate_scores.py`. |
+
+`raw_scores.tsv` is a strict column selection of the annotated table, so the values
+agree exactly. Two names differ on purpose, and the difference has to survive a join
+on `(variant, library, assay, assay_treatment)`:
+
+- `score_j` is the raw WT-relative score in both tables. `average_score` in the raw
+  table is the mean of those three; `average score` in the annotated table is the
+  mean of the **corrected** replicates.
+- `std_adj_score_j` in the raw table is the standard curve fitted on the raw
+  replicates; `intercept_0_std_adj_score_j` in the annotated table is fitted on the
+  corrected ones.
+
+**The correction.** Two of 192 replicates resolve materially less of their assay's
+dynamic range than their two siblings do, and are corrected by a single exponent
+about wild type, clamped outside the measured range; the other 190 come through
+bit-identical. `scripts/gain_correction.py` carries the method, the thresholds and
+the evidence. The raw table has none of it.
+
 ## What is here, and what is not
 
-The notebooks, the shared utilities (`utils.py`), the replicate gain correction
-(`scripts/gain_correction.py`), the library the notebooks import
-(`src/labelseq_mapk/`) and the configuration (`config/`).
+The notebooks; the shared utilities (`utils.py`); the library they import
+(`src/labelseq_mapk/`); the configuration (`config/`); and three scripts —
+`gain_correction.py` (the replicate correction), `reannotate_scores.py` (builds
+the annotated table) and `export_raw_scores.py` (builds the raw table).
 
 **Not here: any data.** The barcode counts, the score tables and the annotated
 tables are orders of magnitude too large for GitHub, and the annotation source
