@@ -103,8 +103,9 @@ Only what the pipeline needs to run, plus the column reference:
   (builds the raw table)
 - `src/labelseq_mapk/` — `config.py` and `annotation.py`, the two modules the
   above import
-- `config/` — the four YAML files, and `data/dn_cutoffs_empty_vector.tsv`, the one
-  data file small enough to version
+- `config/` — the four YAML files
+- `data/dn_cutoffs_empty_vector.tsv` — the per-library empty-vector DN thresholds,
+  the one data file small enough to version
 - `docs/score_table_columns.md` — every column of both tables
 - `environment.yaml`
 

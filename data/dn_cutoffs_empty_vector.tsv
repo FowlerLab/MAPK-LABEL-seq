@@ -1,0 +1,25 @@
+library	assay_treatment  dn_threshold  n_ev_barcodes
+araf_cterm    No_treatment      0.629033           5787
+araf_nterm    No_treatment      0.548617            709
+braf_cterm    No_treatment      0.893071            375
+braf_nterm    No_treatment      0.753697            885
+craf_cterm    No_treatment      0.259863           5499
+craf_nterm    No_treatment      0.159278           1900
+      egfr    No_treatment      0.172559             41
+      egfr     SerumStarve      0.722095             41
+     erbb2    No_treatment      0.357219             26
+      grb2    No_treatment      1.221833            319
+      kras            CIAR      0.274708            123
+      kras    No_treatment      0.182656            134
+ksr1_cterm    No_treatment      4.260577           6015
+ksr1_nterm    No_treatment      3.982377          32817
+ksr2_cterm    No_treatment      1.063243             74
+ksr2_nterm    No_treatment      1.179892           9577
+      mek1    No_treatment      0.926518             67
+      mek2    No_treatment      0.870213             47
+       met    No_treatment      0.093530             74
+      mras    No_treatment      0.693327           2496
+       ret    No_treatment      0.774160             91
+      shp2    No_treatment      0.794250            567
+      sos1    No_treatment      0.138374             87
+      sos2    No_treatment      0.369895            808

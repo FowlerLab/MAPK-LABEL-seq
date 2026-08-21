@@ -1,15 +1,17 @@
 # Data — too large for GitHub, deposited with the manuscript instead
 *.tsv
-# ...except this one: the per-library empty-vector DN thresholds, small enough to
-# version and needed by the dominant-negative step
-!data/dn_cutoffs_empty_vector.tsv
 *.csv
 *.gz
 *.zip
 *.xlsx
 *.fastq
 output/
-data/
+# `data/*` rather than `data/`: git cannot un-ignore a file inside an ignored
+# DIRECTORY, so the negation below only works if the directory itself is not
+# excluded. The DN threshold table is small enough to version and the
+# dominant-negative step needs it.
+data/*
+!data/dn_cutoffs_empty_vector.tsv
 
 # Python
 __pycache__/
