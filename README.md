@@ -72,9 +72,10 @@ The pipeline writes two tables. Which one you want depends on what you are doing
 | **`raw_scores.tsv`** | 38 | The measurements. Identity, reference sequence (UniProt isoform, RefSeq, Ensembl, and GRCh38 coordinates where the protein change has a resolvable nucleotide route), barcode support, the **uncorrected** per-replicate ratios and scores with their standard curve, and the low/wt-like/high classification. Written by `scripts/export_raw_scores.py`. |
 | **`scores_reannotated.tsv`** | 96 | Everything the figures need: the gain-corrected replicates, dominant-negative calls, the HSP90 dependence and buffering families, structure, conservation, PTMs, clinical and population annotation. Written by `scripts/reannotate_scores.py`. |
 
-Every column of both tables — what it means, how it was derived and which primary
-source it came from — is documented in
-[`docs/score_table_columns.md`](docs/score_table_columns.md).
+Each table has its own column reference — every column, in file order, with what
+it means and where it came from:
+[`docs/scores_reannotated_columns.md`](docs/scores_reannotated_columns.md) and
+[`docs/raw_scores_columns.md`](docs/raw_scores_columns.md).
 
 `raw_scores.tsv` is a strict column selection of the annotated table, so the values
 agree exactly. Two names differ on purpose, and the difference has to survive a join
@@ -106,7 +107,7 @@ Only what the pipeline needs to run, plus the column reference:
 - `config/` — the four YAML files
 - `data/dn_cutoffs_empty_vector.tsv` — the per-library empty-vector DN thresholds,
   the one data file small enough to version
-- `docs/score_table_columns.md` — every column of both tables
+- `docs/` — a column reference for each of the two tables
 - `environment.yaml`
 
 **Not here: any data.** The barcode counts, the score tables and the annotated
