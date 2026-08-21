@@ -6,14 +6,14 @@ proteins, measured with
 
 ## Authors and contributions
 
-- **Sriram Pendyala** — project design, experiments, data, and analysis.
+- **Sriram Pendyala** — design, data, and analysis.
 - **Jessica Simon** — the LABEL-seq method
   ([Simon, Fowler & Maly, *Nature Methods* 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC11785348/))
-  and the original scoring and annotation analysis this pipeline was rebuilt from.
+  and experiments, data, and the original scoring and annotation analysis this pipeline was rebuilt from.
 - **Claude** (Anthropic, Opus 5) — pipeline, analysis scripts and documentation,
   written with Sriram.
 
-Fowler Lab, Department of Genome Sciences, University of Washington.
+Fowler and Maly Labs, Department of Genome Sciences, University of Washington.
 
 ## What is measured
 
@@ -72,6 +72,10 @@ The pipeline writes two tables. Which one you want depends on what you are doing
 | **`raw_scores.tsv`** | 38 | The measurements. Identity, reference sequence (UniProt isoform, RefSeq, Ensembl, and GRCh38 coordinates where the protein change has a resolvable nucleotide route), barcode support, the **uncorrected** per-replicate ratios and scores with their standard curve, and the low/wt-like/high classification. Written by `scripts/export_raw_scores.py`. |
 | **`scores_reannotated.tsv`** | 96 | Everything the figures need: the gain-corrected replicates, dominant-negative calls, the HSP90 dependence and buffering families, structure, conservation, PTMs, clinical and population annotation. Written by `scripts/reannotate_scores.py`. |
 
+Every column of both tables — what it means, how it was derived and which primary
+source it came from — is documented in
+[`docs/score_table_columns.md`](docs/score_table_columns.md).
+
 `raw_scores.tsv` is a strict column selection of the annotated table, so the values
 agree exactly. Two names differ on purpose, and the difference has to survive a join
 on `(variant, library, assay, assay_treatment)`:
@@ -92,9 +96,10 @@ the evidence. The raw table has none of it.
 ## What is here, and what is not
 
 The notebooks; the shared utilities (`utils.py`); the library they import
-(`src/labelseq_mapk/`); the configuration (`config/`); and three scripts —
-`gain_correction.py` (the replicate correction), `reannotate_scores.py` (builds
-the annotated table) and `export_raw_scores.py` (builds the raw table).
+(`src/labelseq_mapk/`); the configuration (`config/`); the column reference
+(`docs/score_table_columns.md`); and three scripts — `gain_correction.py` (the
+replicate correction), `reannotate_scores.py` (builds the annotated table) and
+`export_raw_scores.py` (builds the raw table).
 
 **Not here: any data.** The barcode counts, the score tables and the annotated
 tables are orders of magnitude too large for GitHub, and the annotation source
