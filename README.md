@@ -10,7 +10,7 @@ proteins, measured with
 - **Jessica Simon** — the LABEL-seq method
   ([Simon, Fowler & Maly, *Nature Methods* 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC11785348/))
   and experiments, data, the original scoring and annotation analysis this pipeline was rebuilt from,
-  and the figure notebooks for figures 1–6e–i.
+  and the figure notebooks for figures 1–3 and 6e-i.
 - **Claude** (Anthropic, Opus 5) — pipeline, analysis scripts and documentation,
   written with Sriram.
 
