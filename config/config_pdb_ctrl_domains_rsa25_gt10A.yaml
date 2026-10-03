@@ -1,0 +1,151 @@
+# =============================================================================
+# DMS Interface Interaction Analysis — RCSB PDB Experimental Structures
+# Control residue strategy: domain-restricted surface (RSA > 0.25), >10 A (no outer cap)
+# =============================================================================
+#
+# Run with:
+#   python interactions/main.py --config config/config_pdb_ctrl_domains_rsa25_gt10A.yaml
+#
+# PURPOSE OF THIS CONFIG
+# ----------------------
+# Identical to config_pdb_ctrl_domains_rsa25.yaml except the outer distance
+# cap is removed (9999 Å ≈ unlimited). The previous config used a 10–20 Å
+# window; this one uses >10 Å with no upper bound, matching the spatial
+# logic of config_pdb_ctrl_global_excl_rsa25.yaml (but using per-structure
+# interface exclusion rather than global exclusion).
+#
+# Control residue criteria:
+#   (1) RSA > 0.25 (literature-standard surface threshold)
+#   (2) Within an annotated protein domain (control_within_domains: true)
+#   (3) Not at the interface in this structure (>6 Å from partner chain)
+#   (4) ≥10 Å from nearest interface residue (exclusion zone, intrachain C-beta)
+#   (5) No outer distance cap
+#
+# COMPARISON TABLE
+# ----------------
+# Config                                  Controls                      RSA   Output
+# config_pdb.yaml                         Spatial 0–20 Å                0.5   pdb_output/
+# config_pdb_ctrl_domains_rsa25.yaml      Domain + 10–20 Å              0.25  pdb_output_ctrl_domains_rsa25/
+# config_pdb_ctrl_domains_rsa25_gt10A.yaml Domain + >10 Å (no cap)     0.25  pdb_output_ctrl_domains_rsa25_gt10A/
+# config_pdb_ctrl_global_excl_rsa25.yaml  Global excl + >10 Å (no cap) 0.25  pdb_output_ctrl_global_excl_rsa25/
+#
+# CHANGE LOG
+# ----------
+# 2026-03-01  Created. Removed outer distance cap (20 → 9999 Å) from
+#             config_pdb_ctrl_domains_rsa25.yaml.
+
+# =============================================================================
+# INPUT FILES
+# =============================================================================
+
+scores:
+  file: "../output/annotated_combined.tsv"
+  # Accession -> HGNC symbol. The score table's `protein` column holds
+  # library-style names (craf, mek1, mek2, shp2); everything downstream is keyed
+  # on HGNC symbols, so gene_name is derived from the accession instead.
+  gene_symbol_map: "../interactions/gene_symbols.json"
+  columns:
+    variant: "variant"
+    position: "position"
+    score: "mean_WT_relative_score"
+    assay: "assay"
+    library: "library"
+    uniprot_id: "uniprot_accession"
+    gene_name: "protein"
+    mutation_type: "variant_category"
+    assay_treatment: "assay_treatment"
+
+  filters:
+    mutation_types: ["missense"]
+    # Two assay conditions only: abundance and activity, both from the
+    # untreated/vehicle arm. 2026-08-06: dropped the abundance_HSP90i
+    # additional condition and the EGFR activity SerumStarve override so every
+    # panel reports the same baseline treatment.
+    treatment_filters:
+      default: ["No_treatment", "DMSO"]
+
+predictions:
+  - name: "RCSB_PDB"
+    directory: "../data/interactions/pdb_controls/"
+    filename_pattern: "(?P<uniprot_a>[A-Z0-9]+)_(?P<uniprot_b>[A-Z0-9]+)_.*"
+    skip_plddt_filter: true
+
+domains:
+  info_file: "../interactions/domain_info.json"
+  colors_file: "../interactions/domain_colors.json"
+
+# =============================================================================
+# ANALYSIS PARAMETERS
+# =============================================================================
+
+parameters:
+  contact_distance: 6.0
+
+  surface_rsa: 0.25
+
+  control_within_domains: true
+
+  # Exclusion zone only — no outer cap.
+  control_spatial_distance_min: 10.0
+  control_spatial_distance: 9999.0
+
+  control_use_global_interface: false
+
+  min_positions_per_group: 3
+
+# =============================================================================
+# STATISTICS TO COMPUTE
+# =============================================================================
+
+statistics:
+  mann_whitney: true
+  ks_test: true
+  permutation_test: true
+  permutation_n: 1000
+  cohens_d: true
+  cliffs_delta: true
+  log_fold_change: true
+  auroc: true
+  wasserstein: true
+  bootstrap_ci: true
+  bootstrap_n: 1000
+  bootstrap_ci_level: 0.95
+  fdr_correction: true
+  fdr_method: "fdr_bh"
+
+# =============================================================================
+# SIGNIFICANCE THRESHOLDS
+# =============================================================================
+
+thresholds:
+  pvalue: 0.001
+  fdr_pvalue: 0.05
+  auroc: 0.0
+  min_effect_size: 0.3
+
+# =============================================================================
+# OUTPUT SETTINGS
+# =============================================================================
+
+output:
+  directory: "../output/interactions/pdb_output_ctrl_domains_rsa25_gt10A/"
+  generate_plots: true
+  generate_pymol: false
+  generate_heatmaps: false
+
+structure_filters:
+  plddt_threshold: null
+  min_residues_after_filter: 10
+
+parallel:
+  n_cores: 10
+
+sge:
+  memory_per_core: "10G"
+  n_cores: 10
+  runtime: "4:00:00"
+  project: null
+
+paths:
+  pymol: "$HOME/pymol/pymol"
+  dssp: "mkdssp"

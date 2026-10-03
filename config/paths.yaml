@@ -47,7 +47,7 @@ annotations:
   psp_disease: data/inputs/annotations/Published_Datasets/PhosphositePlus_downloads_260116/Disease-associated_sites.tsv
 
   # PDB structures for interface calculations
-  pdb_dir: data/inputs/annotations/pdb_controls 2
+  pdb_dir: data/inputs/annotations/pdb_controls
 
 # Population database data 
 # These are cached API query results — positions mapped to our coordinates

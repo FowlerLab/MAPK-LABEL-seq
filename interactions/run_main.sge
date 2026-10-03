@@ -1,0 +1,19 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -V
+#$ -pe serial 10
+#$ -l mfree=10G
+#$ -l h_rt=8:00:00
+#
+# Run main.py for one structure source on an SGE cluster, from the repo root:
+#
+#   qsub -N main_pdb         interactions/run_main.sge config/config_pdb_ctrl_domains_rsa25_gt10A.yaml
+#   qsub -N main_predictomes interactions/run_main.sge config/config_predictomes_dom_r25_gt10.yaml
+#   qsub -N main_zhang       interactions/run_main.sge config/config_zhang_dom_r25_gt10.yaml
+#
+# 10 cores matches `parallel.n_cores` in the configs. -V carries the submitting
+# shell's environment, so activate labelseq_mapk_interactions (and put mkdssp on
+# PATH) before submitting, or set INTERACTIONS_PYTHON to that env's python.
+set -euo pipefail
+"${INTERACTIONS_PYTHON:-python}" interactions/main.py --config "$1"

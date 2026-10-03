@@ -1,0 +1,19 @@
+# Paths for the interaction analysis (Interactions.ipynb and the scripts in
+# interactions/), relative to the repository root, which they run from.
+
+# main.py outputs, one directory per structure source
+predictomes_dir: "output/interactions/predictomes_output_dom_r25_gt10"
+zhangetal_dir: "output/interactions/Zhangetal_output_dom_r25_gt10"
+pdb_output_dir: "output/interactions/pdb_output_ctrl_domains_rsa25_gt10A"
+
+scores_file: "output/annotated_combined.tsv"
+domain_info_file: "interactions/domain_info.json"
+domain_colors_file: "interactions/domain_colors.json"
+
+plots_dir: "output/figures/fig6"
+
+# Structure directories (compute_interchain_clashes.py)
+structures:
+  pdb_dir: "data/interactions/predictomes_MAPK"
+  zhangetal_pdb_dir: "data/interactions/Zhangetal_structures"
+  rcsb_pdb_dir: "data/interactions/pdb_controls"
