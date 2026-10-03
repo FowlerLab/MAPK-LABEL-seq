@@ -14,7 +14,7 @@ proteins, measured with
 - **Claude** (Anthropic, Opus 5) — pipeline, analysis scripts and documentation,
   written with Sriram.
 
-Fowler and Maly Labs, Department of Genome Sciences, University of Washington.
+Fowler and Maly Labs, Department of Genome Sciences and Chemistry, University of Washington.
 
 ## What is measured
 
