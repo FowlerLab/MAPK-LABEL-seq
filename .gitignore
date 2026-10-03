@@ -13,6 +13,10 @@ output/
 data/*
 !data/dn_cutoffs_empty_vector.tsv
 
+# Per-pair interaction annotations (curated database evidence and partner
+# druggability) for the supplementary interaction table; small and hand-checked.
+!interactions/pair_annotations.tsv
+
 # Python
 __pycache__/
 *.pyc

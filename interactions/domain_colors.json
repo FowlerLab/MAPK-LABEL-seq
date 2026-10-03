@@ -1,0 +1,119 @@
+{
+  "ARAF": {
+    "": "#808080",
+    "C1_A_C-Raf": "#f77189",
+    "RBD_ARAF": "#50b131",
+    "STKc_A-Raf": "#3ba3ec"
+  },
+  "BRAF": {
+    "": "#808080",
+    "C1_B-Raf": "#f77189",
+    "RBD_BRAF": "#50b131",
+    "STKc_Raf": "#3ba3ec"
+  },
+  "RAF1": {
+    "": "#808080",
+    "C1_A_C-Raf": "#f77189",
+    "RBD_RAF1": "#50b131",
+    "STKc_C-Raf": "#3ba3ec"
+  },
+  "EGFR": {
+    "": "#808080",
+    "Furin-like": "#f77189",
+    "GF_recep_IV": "#ae9d31",
+    "PTKc_EGFR": "#33b07a",
+    "Recep_L_domain": "#38a9c5",
+    "TM_ErbB1": "#cc7af4"
+  },
+  "ERBB2": {
+    "": "#808080",
+    "Furin-like": "#f77189",
+    "GF_recep_IV": "#ae9d31",
+    "PTKc_HER2": "#33b07a",
+    "Recep_L_domain": "#38a9c5",
+    "TM_ERBB2": "#cc7af4"
+  },
+  "GRB2": {
+    "": "#808080",
+    "SH2_GRB2_like": "#f77189",
+    "SH3_GRB2_C": "#50b131",
+    "SH3_GRB2_N": "#3ba3ec"
+  },
+  "KSR1": {
+    "": "#808080",
+    "C1_KSR1": "#f77189",
+    "SAM_KSR1 superfamily": "#97a431",
+    "SAM_KSR1_N superfamily": "#36ada4",
+    "STKc_KSR1": "#a48cf4"
+  },
+  "KSR2": {
+    "": "#808080",
+    "C1 superfamily": "#f77189",
+    "PK_KSR2": "#97a431",
+    "SAM_KSR1 superfamily": "#36ada4",
+    "SAM_KSR1_N": "#a48cf4"
+  },
+  "MET": {
+    "": "#808080",
+    "IPT": "#f77189",
+    "IPT_plexin_repeat1": "#c69432",
+    "IPT_plexin_repeat2": "#82a931",
+    "IPT_plexin_repeat3": "#34af8a",
+    "PSI": "#37aabb",
+    "PTKc_MET_Ron": "#8197f4",
+    "Sema_MET": "#f45deb"
+  },
+  "RET": {
+    "": "#808080",
+    "Cadherin": "#f77189",
+    "PTKc_RET": "#ae9d31",
+    "RET_CLD1": "#33b07a",
+    "RET_CLD3": "#38a9c5",
+    "RET_CLD4": "#cc7af4"
+  },
+  "KRAS": {
+    "": "#808080",
+    "H_N_K_Ras_like": "#f77189"
+  },
+  "MRAS": {
+    "": "#808080",
+    "M_R_Ras_like": "#f77189"
+  },
+  "SHOC2": {
+    "": "#808080",
+    "LRR": "#f77189"
+  },
+  "PTPN11": {
+    "": "#808080",
+    "PTPc-N11": "#f77189",
+    "SH2_C-SH2_SHP_like": "#50b131",
+    "SH2_N-SH2_SHP_like": "#3ba3ec"
+  },
+  "SOS1": {
+    "": "#808080",
+    "HFD_SOS1_rpt1": "#f77189",
+    "HFD_SOS1_rpt2": "#c69432",
+    "PH_SOS": "#82a931",
+    "PTZ00449 superfamily": "#34af8a",
+    "RasGEF": "#37aabb",
+    "RasGEFN": "#8197f4",
+    "RhoGEF": "#f45deb"
+  },
+  "SOS2": {
+    "": "#808080",
+    "HFD_SOS1_rpt1": "#f77189",
+    "HFD_SOS1_rpt2": "#bb9832",
+    "PH_SOS": "#50b131",
+    "RasGEF": "#36ada4",
+    "RasGEFN": "#3ba3ec",
+    "RhoGEF": "#e866f4"
+  },
+  "MAP2K1": {
+    "": "#808080",
+    "PKc_MAP2K1": "#f77189"
+  },
+  "MAP2K2": {
+    "": "#808080",
+    "PKc_MAP2K2": "#f77189"
+  }
+}

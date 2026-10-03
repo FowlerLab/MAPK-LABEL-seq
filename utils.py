@@ -98,6 +98,11 @@ SCORES_RECOVERED = OUTPUT / "scoring" / "scores_masterframe_recovered.tsv"
 SCORES_REANNOTATED = OUTPUT / "scoring" / "scores_reannotated.tsv"
 #: Written by Annotations.ipynb: the combined annotation set the figures use.
 ANNOTATED_COMBINED = OUTPUT / "annotated_combined.tsv"
+#: Also written by Annotations.ipynb: the released score table, exactly the
+#: Supplementary Table 2 columns of ANNOTATED_COMBINED.
+SUPPLEMENTARY_TABLE_2 = OUTPUT / "Supplementary_Table_2.tsv"
+#: The per-variant HSP90 calls merged into both tables above.
+HSP90_DERIVED_ANNOTATIONS = OUTPUT / "hsp90" / "hsp90_derived_annotations.tsv"
 
 #: Barcode-level scores for both no-variant controls (`empty_vector_std` and
 #: `NoVar_std`), written by Scoring.ipynb Step 11. The raw material the DN
@@ -309,9 +314,11 @@ HSP90I_PROTEINS = ["araf", "braf", "craf", "egfr", "ksr2", "mek1", "mek2",
 #: against a meaningful no-kinase floor.
 BASELINE_TREATMENTS = {"No_treatment", "DMSO"}
 
-#: Variant types that change the protein product. DN is restricted to these:
-#: synonymous and the BRAF spike-in standards cannot be dominant negative.
-PROTEIN_ALTERING_TYPES = {"missense", "nonsense", "deletion"}
+#: Variant types that change the protein product, in the `variant_category`
+#: vocabulary. DN is restricted to these: synonymous and the BRAF spike-in
+#: standards cannot be dominant negative. "3nt deletion" includes delins_2for1,
+#: the 3-nt deletions that straddle a codon boundary.
+PROTEIN_ALTERING_TYPES = {"missense", "nonsense", "3nt deletion"}
 
 #: PyMOL executable. Override with the ``PYMOL`` environment variable.
 PYMOL_BIN = Path(os.environ.get("PYMOL", Path.home() / "pymol" / "pymol"))

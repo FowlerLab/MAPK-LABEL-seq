@@ -1,0 +1,31 @@
+# Environment for the figure notebooks (Fig1-Fig6). Python 3.12 and pandas 2.x,
+# matching the module Python the notebooks were written against. matplotlib is
+# pinned to the version stamped in Jessica's figures: 3.10 renders text and
+# antialiasing differently, so figures differ by a few pixels.
+name: labelseq_mapk_figures
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pandas=2.3
+  - numpy=2.2
+  - scipy
+  - matplotlib=3.11.1
+  - seaborn=0.13
+  - statsmodels
+  - scikit-learn
+  - pillow
+  - requests
+  - pyyaml
+  - biopython
+  - ipykernel
+  - nbconvert
+  - nbclient
+  - tqdm
+  - pip
+  - pip:
+      - joypy
+      - svgutils
+      - brokenaxes
+      - ruptures
+      - matplotlib-venn

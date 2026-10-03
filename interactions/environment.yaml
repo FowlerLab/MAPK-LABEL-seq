@@ -1,0 +1,38 @@
+# Environment for the protein-interaction analysis (Figure 5, Extended Data 9).
+#
+# Separate from ../environment.yaml on purpose. This code was developed and its
+# published figures were produced against pandas 1.5 / numpy 1.24; the main
+# environment carries pandas 3, whose copy-on-write semantics and default string
+# dtype change the behaviour of pandas 1.x code without raising. The versions
+# below are the ones the figures were made with, pinned exactly.
+#
+#   conda env create -f interactions/environment.yaml
+#   conda activate labelseq_mapk_interactions
+#
+# PyMOL (open-source or incentive, >= 2.5) and DSSP 3.1.4 (`mkdssp`) are needed
+# for the structure panels and main.py respectively; set $PYMOL if pymol is not
+# at ~/pymol/pymol.
+name: labelseq_mapk_interactions
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+      - numpy==1.24.4
+      - pandas==1.5.3
+      - scipy==1.10.1
+      - scikit-learn==1.3.2
+      - statsmodels==0.12.2
+      - matplotlib==3.7.3
+      - seaborn==0.11.2
+      - matplotlib-venn==0.11.10
+      - adjustText==1.2.0
+      - biopython==1.79
+      - openpyxl==3.1.5
+      - pyyaml==5.4.1
+      - requests==2.32.3
+      - ipykernel==6.29.5
+      - nbconvert==7.16.4
+      - nbformat
+      - pytest==6.2.3
